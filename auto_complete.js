@@ -5,49 +5,38 @@ var input = document.querySelector('input');
  * builds list of matching countries based on the user input.
  *
  * @param val
- * @returns {Array}
  */
-function autoComplete(val) {
-    var countries_list = [];
+function loadCountries(val) {
+    var $countries = document.getElementById("countries");
+
+    $countries.innerHTML = '';
 
     for (var i = 0; i < countries.length; i++) {
-        if (val.toLowerCase() === countries[i].name.toLowerCase().slice(0, val.length)) {
-            countries_list.push(countries[i].name);
+        if (countries[i].name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+            $countries.innerHTML += '<li>' + countries[i].name + '</li>';
         }
     }
-
-    return countries_list;
-}
-
-/**
- * Clear input filed and listed countries
- *
- * @param that
- * @param $countries
- */
-function clear(that, $countries) {
-    that.value = '';
-    $countries.innerHTML = '';
 }
 
 /**
  * JavaScript KeyUp event for capturing user input
  *
  * @param e
- * @returns {*}
+ * @returns {Array}
  */
 input.onkeyup = function (e) {
-    var value = this.value,
-        $countries = document.getElementById("countries");
-
-    if (value.length == 0 || e.keyCode == 27) {
-        return clear(this, $countries);
+    if (this.value.length == 0 || e.keyCode == 27) {
+        this.value = '';
     }
 
-    $countries.innerHTML = '';
-    var countries = autoComplete(value);
+    return loadCountries(this.value);
+};
 
-    for (var i = 0; i < countries.length; i++) {
-        $countries.innerHTML += '<li>' + countries[i] + '</li>';
-    }
+/**
+ * Init countries load
+ *
+ * @returns {Array}
+ */
+window.onload = function () {
+    return loadCountries('');
 };
